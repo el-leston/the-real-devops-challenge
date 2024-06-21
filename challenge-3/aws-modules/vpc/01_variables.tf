@@ -1,8 +1,13 @@
+##GLOBAL VARIABLE#
+
 variable "region" {
   type        = string
   default     = "eu-central-1"
   description = "region to deploy the subnetes"
 }
+
+
+#VPC Related Variables#
 
 variable "cidrs" {
   type        = object({
@@ -11,6 +16,19 @@ variable "cidrs" {
   })
   description = "CIDRs of the VPC"
 }
+
+variable enable_dns_hostnames {
+  type        = bool
+  default     = true
+  description = "Enable DNS hostnames in the VPC"
+}
+
+variable enable_dns_support {
+  type        = bool
+  default     = true
+  description = "Enable DNS support in the VPC"
+}
+
 variable "subnets" {
     type = map(object({
         availability_zones = optional (list(string),["a","b","c"])
@@ -20,3 +38,10 @@ variable "subnets" {
         subnetName        = optional(string,"")
     }))
 }
+
+variable "nat_gateway_id" {
+  type        = string
+  default     = null
+  description = "nat gateway id"
+}
+
