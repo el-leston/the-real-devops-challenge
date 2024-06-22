@@ -50,6 +50,10 @@ subnets = {
 
 }
 
+#### ASG ####
+asg_name = "el-autoscaling-group"
+
+
 
 target_groups = {
   tg = {

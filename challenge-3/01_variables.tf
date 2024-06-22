@@ -30,3 +30,8 @@ variable "target_groups" {
         health_protocol = optional(string,"TCP")
     }))
 }
+
+variable "asg_name" {
+  type        = string
+  description = "the name of the autoscaling group"
+}
