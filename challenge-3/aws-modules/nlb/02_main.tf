@@ -48,10 +48,20 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+# Create aws_lb_target_group_attachment for each instance in each target group
+# instance input example [0=i-123123 , 1=123123213213]
+resource "aws_lb_target_group_attachment" "example" {
+  for_each = { for v in local.tg_attachments : v.key => v }
+
+  target_group_arn = each.value.target_group_arn
+  target_id        = each.value.instance_id
+  port             = each.value.port
+}
+
 
 # Security group for the Network Load Balancer
 resource "aws_security_group" "nlb-sg" {
-  name_prefix = "el-"
+  name = "nlb-sg"
   description = "NLB security group"
   vpc_id      = var.vpc_id
     // inbound vpc access
@@ -61,39 +71,49 @@ resource "aws_security_group" "nlb-sg" {
     protocol    = "-1"
     cidr_blocks = [var.cidrs.primary, var.cidrs.secondary[0]]
   }
+   // internet http access 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  // internet https access 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-    //  outbound alloance access 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [var.cidrs.primary, var.cidrs.secondary[0]]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "ICMP"
-    cidr_blocks = [var.cidrs.primary, var.cidrs.secondary[0]]
-  }
+    // http egress outside
   egress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.cidrs.primary, var.cidrs.secondary[0]]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
     Name = "nlb-sg"
   }
+}
+
+
+# added nlb ingress to vpc default sg
+resource "aws_vpc_security_group_ingress_rule" "asg-nlb-ingress" {
+  security_group_id = data.aws_security_groups.this.ids[0] #default sg
+  referenced_security_group_id =  aws_security_group.nlb-sg.id #passar sg do nlb
+  from_port   = 80
+  ip_protocol = "tcp"
+  to_port     = 80
+}
+
+#added  vpc sg to nlb egress of the nlb sg
+
+resource "aws_vpc_security_group_egress_rule" "asg-nlb-egress" {
+  security_group_id = aws_security_group.nlb-sg.id # nlb sg
+  referenced_security_group_id = data.aws_security_groups.this.ids[0] # add
+  from_port   = 80
+  ip_protocol = "tcp"
+  to_port     = 80
 }

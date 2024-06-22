@@ -5,9 +5,13 @@ provider "aws" {
 resource "aws_launch_template" "this" {
   name = "el-launch-template"
 
+  iam_instance_profile {
+    arn = "arn:aws:iam::811931148196:instance-profile/SSM"
+  }
   # Launch template versioning can be controlled explicitly or defaulted.
   #version = "$Latest"
 
+  vpc_security_group_ids  = [data.aws_security_groups.this.ids[0]]
   # Basic configuration for the launch template
   block_device_mappings {
     device_name = "/dev/xvda"
@@ -48,31 +52,8 @@ resource "aws_launch_template" "this" {
       Name = "el-instance"
     }
   }
-}
 
-# Optional: Security group for the instance
-resource "aws_security_group" "sg" {
-  name_prefix = "el-"
-  description = "Example security group"
-  vpc_id      = var.vpc_id
-    // inbound vpc access
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [var.cidrs.primary, var.cidrs.secondary[0]]
-  }
-    //  outbound alloance access 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "sg"
-  }
+  user_data = filebase64("${path.module}/user_data.sh")
 }
 
 resource "aws_placement_group" "test" {
@@ -81,7 +62,7 @@ resource "aws_placement_group" "test" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name                      = "el-autoscaling-group"
+  name                      = var.asg_name
   launch_template {
     id      = aws_launch_template.this.id
     version = aws_launch_template.this.latest_version
@@ -90,15 +71,39 @@ resource "aws_autoscaling_group" "this" {
   vpc_zone_identifier       = var.subnet_ids 
   min_size                  = 0
   max_size                  = 2
-  desired_capacity          = 0
+  desired_capacity          = 2
   health_check_type         = "EC2"
   health_check_grace_period = 300
 
   tag {
       key                 = "Name"
-      value               = "el-autoscaling-group"
+      value               = var.asg_name
       propagate_at_launch = true
     }
   
 }
+
+/* # added nlb ingress to vpc default sg
+resource "aws_vpc_security_group_ingress_rule" "asg-nlb-ingress" {
+  count = length(data.aws_security_groups.nlb-sg.ids) > 0 ? 1 : 0
+
+  security_group_id = data.aws_security_groups.this.ids[0] #default sg
+  referenced_security_group_id =  data.aws_security_groups.nlb-sg.ids[0] #passar sg do nlb
+  from_port   = 80
+  ip_protocol = "tcp"
+  to_port     = 80
+}
+
+#added  vpc sg to nlb egress of the nlb sg
+
+resource "aws_vpc_security_group_egress_rule" "asg-nlb-egress" {
+  count = length(data.aws_security_groups.nlb-sg.ids) > 0 ? 1 : 0
+
+  security_group_id = data.aws_security_groups.nlb-sg.ids[0] # nlb sg
+  referenced_security_group_id = data.aws_security_groups.this.ids[0] # add
+  from_port   = 80
+  ip_protocol = "tcp"
+  to_port     = 80
+}
+ */
 

@@ -39,3 +39,9 @@ variable "cidrs" {
   })
   description = "CIDRs of the VPC"
 }
+
+variable "asg_name" {
+  type        = string
+  default     = "el-autoscaling-group"
+  description = "the name of the autoscaling group"
+}

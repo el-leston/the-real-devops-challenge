@@ -32,3 +32,10 @@ data "aws_subnets" "nlb_subnets" {
     values = ["public-subnet-a", "private-subnet-b"] 
   }
 }
+
+data "aws_security_groups" "nlb-sg-ids" {
+  filter {
+    name   = "group-name"
+    values = ["nlb-sg"]
+  }
+}

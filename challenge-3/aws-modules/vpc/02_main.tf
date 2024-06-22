@@ -98,3 +98,27 @@ resource "aws_route_table_association" "private" {
   }
 }
 
+# Security group for the VPC
+resource "aws_default_security_group" "default" {
+  #name = "default"
+  #description = "VPC security group"
+  vpc_id      = local.vpc_id
+    // inbound vpc access from sg itself
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+  }
+    // internet egress
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "default"
+  }
+}
