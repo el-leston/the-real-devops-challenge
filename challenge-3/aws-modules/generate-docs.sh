@@ -13,7 +13,3 @@ for dir in */; do
         cd ..
     fi
 done
-
-cd ../challenge-3/
-echo "Processing directory: $dir"
-terraform-docs markdown table --output-file README.md --output-mode inject ./
