@@ -163,3 +163,17 @@ No resources.
 
 No outputs.
 <!-- END_TF_DOCS -->
+
+Browse for NLB DNS
+![curl-browser.png](images/curl-browser.png "browse nlb dns ")
+
+Network Map
+![network-map.png](images/network-map.png "Network Map Overview ")
+
+Network Load Balancer Target groups 
+![nlb-tg-instances.png](images/nlb-tg-instances.png "Listerners, target groups and instances ")
+
+## Final considerations
+- NLB was only present in eu-central-1a and eu-central-1b
+- ASG spans instance accross all the azs.
+- Instances outside of the NLB reach, won't be target.
