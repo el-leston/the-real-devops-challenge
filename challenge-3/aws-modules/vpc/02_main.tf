@@ -66,14 +66,14 @@ resource "aws_route_table" "private" {
   }
 }
 
-# Create a route to the NAT Gateway in the private route table if is already created in console(to avoid cost)
+/* # Create a route to the NAT Gateway in the private route table if is already created in console(to avoid cost)
 resource "aws_route" "private" {
   count                  = try(data.aws_nat_gateway.default[0].id, null) != null? 1:0
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = data.aws_nat_gateway.default[0].id
 }
-
+ */
 # Associate public subnets with the public route table
 resource "aws_route_table_association" "public" {
   for_each = local.public_subnets

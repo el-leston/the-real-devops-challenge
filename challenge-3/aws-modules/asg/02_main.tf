@@ -79,27 +79,31 @@ resource "aws_autoscaling_group" "this" {
   
 }
 
-/* # added nlb ingress to vpc default sg
-resource "aws_vpc_security_group_ingress_rule" "asg-nlb-ingress" {
-  count = length(data.aws_security_groups.nlb-sg.ids) > 0 ? 1 : 0
 
-  security_group_id = data.aws_security_groups.this.ids[0] #default sg
-  referenced_security_group_id =  data.aws_security_groups.nlb-sg.ids[0] #passar sg do nlb
-  from_port   = 80
-  ip_protocol = "tcp"
-  to_port     = 80
+
+# Elastic IP for NAT Gateway
+resource "aws_eip" "nat" {
+  domain = "vpc"
 }
 
-#added  vpc sg to nlb egress of the nlb sg
+resource "aws_nat_gateway" "this" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = data.aws_subnets.nat_public_subnet.ids[0]
 
-resource "aws_vpc_security_group_egress_rule" "asg-nlb-egress" {
-  count = length(data.aws_security_groups.nlb-sg.ids) > 0 ? 1 : 0
+  tags = {
+    Name = "Public Nat GW"
+  }
 
-  security_group_id = data.aws_security_groups.nlb-sg.ids[0] # nlb sg
-  referenced_security_group_id = data.aws_security_groups.this.ids[0] # add
-  from_port   = 80
-  ip_protocol = "tcp"
-  to_port     = 80
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  #depends_on = [data.aws_internet_gateway.default]
 }
- */
 
+
+# Create a route to the NAT Gateway in the private route table if is already created in console(to avoid cost)
+
+resource "aws_route" "private" {
+  route_table_id         = data.aws_route_table.private_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.this.id
+}

@@ -1,4 +1,6 @@
 region = "eu-central-1"
+
+#### VPC ####
 cidrs = {
   primary   = "172.10.0.0/25"
   secondary = ["172.10.0.128/25"]
@@ -54,13 +56,18 @@ subnets = {
 asg_name = "el-autoscaling-group"
 
 
-
+#### NLB ####
 target_groups = {
   tg = {
-      name        = "nlb-tg"
-      port        = 80
-      target_type = "instance"
-      protocol    = "TCP"
-      health_check_protocol = "TCP"
+    name                  = "nlb-tg"
+    port                  = 80
+    target_type           = "instance"
+    protocol              = "TCP"
+    health_check_protocol = "TCP"
   }
 }
+
+
+#### S3 ####
+bucket_name     = "challenge-assets-bucket"
+log_bucket_name = "challenge-logging-bucket"
