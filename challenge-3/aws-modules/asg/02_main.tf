@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region  # Replace with your desired region
-}
-
 resource "aws_launch_template" "this" {
   name = "el-launch-template"
 

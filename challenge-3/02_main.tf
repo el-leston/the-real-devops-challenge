@@ -33,7 +33,7 @@ module "nlb" {
   target_groups = var.target_groups
   cidrs         = var.cidrs
   #asg_name      = var.asg_name
-  depends_on = [module.asg]
+  depends_on = [module.asg, module.vpc]
 }
 
  #READY  
