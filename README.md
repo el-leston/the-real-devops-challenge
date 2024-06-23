@@ -121,3 +121,29 @@ Optional:
   - `tflint`: <https://github.com/terraform-linters/tflint>
   - `tfsec`: <https://github.com/aquasecurity/tfsec> (save output, don't fix it!!)
 - Create Terraform syntax checker and linters with GitHub Actions
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Modules
+
+No modules.
+
+## Resources
+
+No resources.
+
+## Inputs
+
+No inputs.
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->
