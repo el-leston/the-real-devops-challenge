@@ -12,3 +12,7 @@ output "nlb_subnets_ids" {
 output "vpc_id" {
   value = aws_vpc.this.id  
 }
+output default_sg_id {
+  value       = aws_default_security_group.default.id
+  description = "default sg"
+}

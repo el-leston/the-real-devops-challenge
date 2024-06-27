@@ -29,7 +29,7 @@ data "aws_subnets" "public_subnets" {
 data "aws_subnets" "nlb_subnets" {
   filter {
     name   = "tag:Name"
-    values = ["public-subnet-a", "private-subnet-b"] 
+    values = ["public-subnet-a", "private-subnet-b", "private-subnet-c"] 
   }
 }
 

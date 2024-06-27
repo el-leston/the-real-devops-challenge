@@ -101,7 +101,7 @@ resource "aws_security_group" "nlb-sg" {
 
 # added nlb ingress to vpc default sg
 resource "aws_vpc_security_group_ingress_rule" "asg-nlb-ingress" {
-  security_group_id = data.aws_security_groups.this.ids[0] #default sg
+  security_group_id = var.default_sg
   referenced_security_group_id =  aws_security_group.nlb-sg.id #passar sg do nlb
   from_port   = 80
   ip_protocol = "tcp"
@@ -112,7 +112,7 @@ resource "aws_vpc_security_group_ingress_rule" "asg-nlb-ingress" {
 
 resource "aws_vpc_security_group_egress_rule" "asg-nlb-egress" {
   security_group_id = aws_security_group.nlb-sg.id # nlb sg
-  referenced_security_group_id = data.aws_security_groups.this.ids[0] # add
+  referenced_security_group_id = var.default_sg 
   from_port   = 80
   ip_protocol = "tcp"
   to_port     = 80

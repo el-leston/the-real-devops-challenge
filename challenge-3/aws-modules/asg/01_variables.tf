@@ -31,3 +31,9 @@ variable "asg_name" {
   default     = "el-autoscaling-group"
   description = "the name of the autoscaling group"
 }
+
+variable "default_sg" {
+  type        = string
+  description = "default sg id"
+}
+

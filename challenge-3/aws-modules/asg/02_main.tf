@@ -7,7 +7,7 @@ resource "aws_launch_template" "this" {
   # Launch template versioning can be controlled explicitly or defaulted.
   #version = "$Latest"
 
-  vpc_security_group_ids  = [data.aws_security_groups.this.ids[0]]
+  vpc_security_group_ids  = [var.default_sg]
   # Basic configuration for the launch template
   block_device_mappings {
     device_name = "/dev/xvda"
