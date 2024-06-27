@@ -48,8 +48,7 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
-# Create aws_lb_target_group_attachment for each instance in each target group
-# instance input example [0=i-123123 , 1=123123213213]
+
 resource "aws_lb_target_group_attachment" "example" {
   for_each = { for v in local.tg_attachments : v.key => v }
 

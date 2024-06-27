@@ -48,7 +48,6 @@ variable "asg_name" {
 
 variable "instances_ids" {
   type        = list(string)
-  default     = []
   description = "instance ids for the nlb target group"
 }
 

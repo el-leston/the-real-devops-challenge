@@ -1,11 +1,10 @@
 resource "aws_launch_template" "this" {
-  name = "el-launch-template"
+  name = "el-launch-template" # TODO variable
 
   iam_instance_profile {
-    arn = "arn:aws:iam::811931148196:instance-profile/SSM"
+    arn = "arn:aws:iam::811931148196:instance-profile/SSM" # TODO output needed 
   }
-  # Launch template versioning can be controlled explicitly or defaulted.
-  #version = "$Latest"
+
 
   vpc_security_group_ids  = [var.default_sg]
   # Basic configuration for the launch template
@@ -46,16 +45,13 @@ resource "aws_launch_template" "this" {
 
     tags = {
       Name = "el-instance"
+      environmrnt = "Dev"
     }
   }
 
   user_data = filebase64("${path.module}/user_data.sh")
 }
 
-resource "aws_placement_group" "test" {
-  name     = "el-placement"
-  strategy = "cluster"
-}
 
 resource "aws_autoscaling_group" "this" {
   name                      = var.asg_name
@@ -63,7 +59,7 @@ resource "aws_autoscaling_group" "this" {
     id      = aws_launch_template.this.id
     version = aws_launch_template.this.latest_version
   }
-
+  #placement_group           = aws_placement_group.this.id
   vpc_zone_identifier       = var.subnet_ids 
   min_size                  = 0
   max_size                  = 2
@@ -88,22 +84,19 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = data.aws_subnets.nat_public_subnet.ids[0]
+  subnet_id     = var.nat_subnet_id[0] 
 
   tags = {
     Name = "Public Nat GW"
   }
-
-  # To ensure proper ordering, it is recommended to add an explicit dependency
-  # on the Internet Gateway for the VPC.
-  #depends_on = [data.aws_internet_gateway.default]
+  depends_on = [aws_eip.nat]
 }
 
 
 # Create a route to the NAT Gateway in the private route table if is already created in console(to avoid cost)
 
 resource "aws_route" "private" {
-  route_table_id         = data.aws_route_table.private_rt.id
+  route_table_id         = var.private_routable_id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.this.id
 }

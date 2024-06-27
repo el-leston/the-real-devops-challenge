@@ -5,7 +5,7 @@ locals {
       delete_on_termination       = true
       device_index                = idx
       subnet_id                   = subnet_id
-      security_groups             = [data.aws_security_groups.this.ids[0]]
+      security_groups             = [var.default_sg]
     }
   ]
 }
