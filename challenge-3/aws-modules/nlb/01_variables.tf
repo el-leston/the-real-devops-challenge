@@ -45,3 +45,14 @@ variable "asg_name" {
   default     = "el-autoscaling-group"
   description = "the name of the autoscaling group"
 }
+
+variable "instances_ids" {
+  type        = list(string)
+  description = "instance ids for the nlb target group"
+}
+
+
+variable "default_sg" {
+  type        = string
+  description = "default sg id"
+}

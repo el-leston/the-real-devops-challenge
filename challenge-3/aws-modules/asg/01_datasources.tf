@@ -8,40 +8,13 @@ data "aws_security_groups" "this" {
     values = [var.vpc_id]
   }
 }
-data "aws_security_groups" "nlb-sg" {
-  filter {
-    name   = "group-name"
-    values = ["nlb-sg"]
-  }
-  filter {
-    name   = "vpc-id"
-    values = [var.vpc_id]
-  }
-}
 
 
-data "aws_subnets" "nat_public_subnet" {
+data "aws_instances" "asg_instances" {
   filter {
     name   = "tag:Name"
-    values = ["public-subnet-a"] 
-  }
-  filter {
-    name   = "vpc-id"
-    values = [var.vpc_id]
+    values = [var.asg_name]
   }
 }
 
-data "aws_internet_gateway" "default" {
-  filter {
-    name   = "attachment.vpc-id"
-    values = [var.vpc_id]
-  }
-}
-
-data "aws_route_table" "private_rt" {
-  vpc_id = var.vpc_id
-  tags  = {
-    Name = "private-rt"
-  }
-}
 

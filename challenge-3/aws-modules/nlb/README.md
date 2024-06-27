@@ -33,6 +33,8 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_asg_name"></a> [asg\_name](#input\_asg\_name) | the name of the autoscaling group | `string` | `"el-autoscaling-group"` | no |
 | <a name="input_cidrs"></a> [cidrs](#input\_cidrs) | CIDRs of the VPC | <pre>object({<br>    primary   = string<br>    secondary = optional(list(string))<br>  })</pre> | n/a | yes |
+| <a name="input_default_sg"></a> [default\_sg](#input\_default\_sg) | default sg id | `string` | n/a | yes |
+| <a name="input_instances_ids"></a> [instances\_ids](#input\_instances\_ids) | instance ids for the nlb target group | `list(string)` | n/a | yes |
 | <a name="input_internal"></a> [internal](#input\_internal) | True mean internal-facing lb , False means Internet-facing lb | `bool` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | region to deploy the subnetes | `string` | `"eu-central-1"` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | asg subnet ids | `list(string)` | n/a | yes |

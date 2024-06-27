@@ -31,3 +31,21 @@ variable "asg_name" {
   default     = "el-autoscaling-group"
   description = "the name of the autoscaling group"
 }
+
+variable "default_sg" {
+  type        = string
+  description = "default sg id"
+}
+
+
+variable "private_routable_id" {
+  type        = string
+  description = "The private route table id"
+}
+
+variable "nat_subnet_id" {
+  type        = list(string)
+  description = "the nat subnet id "
+}
+
+
