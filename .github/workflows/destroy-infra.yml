@@ -47,11 +47,11 @@ jobs:
         working-directory: challenge-3/
 
       - name: Terraform Destroy tg
-        run: terraform destroy -auto-approve -target module.nlb.aws_lb_target_group
+        run: terraform destroy -auto-approve -target module.nlb.aws_lb_target_group.this
         working-directory: challenge-3/
         
       - name: Terraform Destroy lb listener
-        run: terraform destroy -auto-approve -target module.nlb.aws_lb_listener
+        run: terraform destroy -auto-approve -target module.nlb.aws_lb_listener.this
         working-directory: challenge-3/
 
       - name: Terraform Destroy lb 
