@@ -62,3 +62,11 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan -target module.vpc -target module.asg
         working-directory: challenge-3/
+        
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -target module.vpc -target module.asg
+        working-directory: challenge-3/
+        
+      - name: Terraform Apply nlb
+        run: terraform apply -auto-approve -target module.nlb
+        working-directory: challenge-3/
