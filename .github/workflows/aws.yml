@@ -60,5 +60,5 @@ jobs:
         working-directory: challenge-3/
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -target module.vpc -target module.asg
         working-directory: challenge-3/
