@@ -30,6 +30,7 @@ variable "target_groups" {
         protocol = optional(string,"TCP")
         health_protocol = optional(string,"TCP")
     }))
+    description = "Load balancers target groups that aim for the resources"
 }
 
 variable "cidrs" {
