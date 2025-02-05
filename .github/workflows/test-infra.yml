@@ -20,6 +20,13 @@ jobs:
         with:
           terraform_version: 1.4.0 # Specify your Terraform version here
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1 # Specify your AWS region here
+
       - name: Terraform Init
         run: terraform init
         working-directory: challenge-3/
@@ -34,9 +41,7 @@ jobs:
           curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
       - name: Run TFLint
-        run: |
-          tflint --init && tflint --format compact
-          tflint --disable-rule=aws_s3_bucket_invalid_user_credentials
+        run: tflint --init && tflint --format compact
         working-directory: challenge-3/
 
       # Checkov - Security Scan
