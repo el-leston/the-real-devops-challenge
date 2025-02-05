@@ -1,6 +1,4 @@
 # This workflow will setup terraform and validate, and plan  AWS infrastructure, mainly network resources. 
-# it will generate a terraform graph
-
 name: Validate Infrastructure
 
 on:
