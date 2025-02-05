@@ -37,6 +37,7 @@ variable "subnets" {
         Isroutable        = bool
         subnetName        = optional(string,"")
     }))
+    description = "VPC subnets"
 }
 
 variable "nat_gateway_id" {
