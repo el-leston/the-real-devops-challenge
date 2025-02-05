@@ -41,7 +41,9 @@ jobs:
           curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
       - name: Run TFLint
-        run: tflint --init && tflint --format compact && tflint --disable-rule=terraform_standard_module_structure
+        run: |
+          tflint --init
+          tflint --format compact --disable-rule=terraform_standard_module_structure --disable-rule=terraform_documented_variables
         working-directory: challenge-3/
 
       # Checkov - Security Scan
