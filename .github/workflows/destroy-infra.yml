@@ -4,12 +4,7 @@
 name: Destroy Infrastructure
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   terraform:
@@ -35,7 +30,10 @@ jobs:
       - name: Terraform Init
         run: terraform init
         working-directory: challenge-3/
-        
+      
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: challenge-3/
         
       - name: Terraform Destroy sg-ingress
         run: terraform destroy -auto-approve -target module.nlb.aws_vpc_security_group_ingress_rule.asg-nlb-ingress
@@ -59,6 +57,10 @@ jobs:
 
       - name: Terraform Destroy lb 
         run: terraform destroy -auto-approve -target module.nlb.aws_lb.this
+        working-directory: challenge-3/
+      
+      - name: Terraform Plan Destroy ASG & VPC
+        run: terraform plan -destroy -out=tfplan
         working-directory: challenge-3/
 
       - name: Terraform Destroy asg vpc

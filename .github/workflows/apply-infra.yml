@@ -3,16 +3,17 @@
 name: Deploy Infrastructure
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
   pull_request:
     branches:
       - main
+    types:
+      - labeled
 
 jobs:
   terraform:
     name: Terraform
+    if: contains(github.event.pull_request.labels.*.name, 'deploy')
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +34,10 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: challenge-3/
+        
+      - name: Run Terraform Validate
+        run: terraform validate
         working-directory: challenge-3/
 
       - name: Terraform Plan
