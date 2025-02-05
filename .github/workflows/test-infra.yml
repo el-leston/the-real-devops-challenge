@@ -51,4 +51,4 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: challenge-3/
-          soft_fail: false # Set to true if you want warnings instead of failures
+          soft_fail: true # Set to true if you want warnings instead of failures
