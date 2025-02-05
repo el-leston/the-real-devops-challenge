@@ -34,7 +34,9 @@ jobs:
           curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
       - name: Run TFLint
-        run: tflint --init && tflint --format compact
+        run: |
+          tflint --init && tflint --format compact
+          tflint --disable-rule=aws_s3_bucket_invalid_user_credentials
         working-directory: challenge-3/
 
       # Checkov - Security Scan
