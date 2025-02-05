@@ -1,3 +1,6 @@
+# This workflow will setup terraform and destroy AWS infrastructure, mainly network resources.
+# It will first destroy security groups, then target groups, listeners and for last the load balancer.
+
 name: Destroy Infrastructure
 
 on:
